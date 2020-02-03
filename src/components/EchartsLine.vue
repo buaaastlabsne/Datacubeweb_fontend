@@ -1,0 +1,83 @@
+<template>
+  <div :class="className" :style="{ height: height, width: width }"></div>
+</template>
+
+<script>
+import echarts from 'echarts'
+import { debounce } from '@/utils/charts.js'
+
+export default {
+  props: {
+    className: {
+      type: String,
+      default: 'chart'
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '210px'
+    },
+    autoResize: {
+      type: Boolean,
+      default: true
+    },
+    chartData: {
+      type: Object
+    }
+  },
+  data () {
+    return {}
+  },
+  mounted () {
+    this.initChart()
+    if (this.autoResize) {
+      this.__resizeHanlder = debounce(() => {
+        if (this.$chart) {
+          this.$chart.resize()
+        }
+      }, 100)
+      window.addEventListener('resize', this.__resizeHanlder)
+    }
+  },
+  beforeDestroy () {
+    if (!this.$chart) {
+      return
+    }
+    if (this.autoResize) {
+      window.removeEventListener('resize', this.__resizeHanlder)
+    }
+
+    this.$chart.dispose()
+    this.$chart = null
+  },
+  watch: {
+    chartData: {
+      deep: true,
+      handler (val) {
+        this.setOptions(val)
+      }
+    }
+  },
+  methods: {
+    setOptions (val) {
+      this.$chart.clear() // 清空画布
+      this.$chart.setOption(val)
+    },
+    initChart () {
+      this.$chart = echarts.init(this.$el, 'macarons')
+      this.setOptions(this.chartData)
+    }
+  }
+}
+</script>
+
+<style>
+.echarts{
+  width: 200px;
+  height: 100px;
+  position: absolute;
+}
+</style>

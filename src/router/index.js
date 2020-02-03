@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Layout from '../views/Layout/Layout.vue'
 import DCConfig from '../views/Configuration/DCConfig.vue'
 import DCManage from '../views/Configuration/DCManage.vue'
-import OLAPView from '../views/Analysis/OLAPView.vue'
+import OLAPCreate from '../views/Analysis/OLAPCreate.vue'
+import OLAPDashboard from '../views/Analysis/OLAPDashboard.vue'
 import DataMining from '../views/DataMining/DataMining.vue'
 
 Vue.use(Router)
@@ -41,7 +42,11 @@ export default new Router({
       children:[
         {
           path:'/analysis/OLAP',
-          component:OLAPView
+          component:OLAPCreate
+        },
+        {
+          path: '/analysis/OLAP/:dashboardId',
+          component: OLAPDashboard
         }
       ]
     },

@@ -35,7 +35,7 @@
               <span class="menu-name">陆地环境</span>
             </a>
           </router-link>
-                    <router-link tag="li" class="menu-item no-sub-menu sub-item" to="/configuration/datacubemanage/space">
+          <router-link tag="li" class="menu-item no-sub-menu sub-item" to="/configuration/datacubemanage/space">
             <a class="menu-link">
               <span class="iconfont icon-spaceshuttle"></span>
               <span class="menu-name">空间环境</span>
@@ -50,6 +50,15 @@
             <span class="menu-name">数据多维分析</span>
           </a>
         </router-link>
+        <ul>
+          <router-link tag="li" class="menu-item no-sub-menu sub-item" :to="`/analysis/OLAP/${dashboard.dashboardId}`"
+           v-for="dashboard in dashboards" :key="dashboard.dashboardId">
+            <a class="menu-link">
+              <span class="iconfont icon-dashboard"></span>
+              <span class="menu-name">{{ dashboard.dashboardName }}</span>
+            </a>
+          </router-link>
+        </ul>
       </template>
       <template v-if="route == 'datamining'">
         <router-link tag="li" class="menu-item" to="/datamining">
@@ -64,6 +73,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data(){
     return {
@@ -74,7 +85,10 @@ export default {
     route: function () {
       this.query = ''
       return this.$route.path.split('/')[1]
-    }
+    },
+    ...mapState({
+      dashboards: state => state.analysis.dashboards
+    })
   }
 }
 </script>
@@ -113,9 +127,9 @@ export default {
             overflow hidden
             text-overflow ellipsis
             flex 1    
-      .sub-item       
-        padding-left 40px
-        >a
-          .menu-name
-            margin-left 20px
+      // .sub-item       
+      //   padding-left 30px
+      //   >a
+      //     .menu-name
+      //       margin-left 30px
 </style>
