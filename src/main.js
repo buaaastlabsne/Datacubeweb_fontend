@@ -26,11 +26,14 @@ import {
   Message,
   Select,
   Option,
+  Progress,
   Transfer,
   CheckboxGroup,
   Checkbox,
   CheckboxButton,
-  Tree
+  Tree,
+  Dialog,
+  Radio
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -57,6 +60,9 @@ Vue.use(Checkbox)
 Vue.use(CheckboxButton)
 Vue.use(CheckboxGroup)
 Vue.use(Tree)
+Vue.use(Progress)
+Vue.use(Dialog)
+Vue.use(Radio)
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$confirm = MessageBox.confirm

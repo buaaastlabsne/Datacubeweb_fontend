@@ -2,6 +2,12 @@
   <div class="page-sidebar">
     <ul class="page-sidebar-menu">
       <template v-if="route == 'configuration'">
+        <router-link tag="li" class="menu-item no-sub-menu" to="/configuration/databaseconfig">
+          <a class="menu-link">
+            <span class="iconfont icon-dashboard"></span>
+            <span class="menu-name">数据源配置</span>
+          </a>
+        </router-link>
         <router-link tag="li" class="menu-item no-sub-menu" to="/configuration/datacubeconfig">
           <a class="menu-link">
             <span class="iconfont icon-configuration"></span>

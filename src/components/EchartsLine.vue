@@ -1,53 +1,51 @@
 <template>
-  <div :class="className" :style="{ height: height, width: width }"></div>
+  <div class="echarts" :id="'chart' + chartIndex"></div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import { debounce } from '@/utils/charts.js'
+import { EleResize } from '@/utils/common.js'
+import dtc2 from '@/assets/dataset/dtc2.js'
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '210px'
-    },
-    autoResize: {
-      type: Boolean,
-      default: true
-    },
     chartData: {
       type: Object
+    },
+    chartIndex: {
+      type: String
     }
   },
   data () {
     return {}
   },
   mounted () {
+    let names = []
+    let nums = []
+    dtc2.list.forEach((e, i) => {
+      names.push(e.latitude)
+      nums.push(e.temperature)
+    })
+    console.log(names)
     this.initChart()
-    if (this.autoResize) {
-      this.__resizeHanlder = debounce(() => {
-        if (this.$chart) {
-          this.$chart.resize()
-        }
-      }, 100)
-      window.addEventListener('resize', this.__resizeHanlder)
-    }
+    this.$chart.setOption({
+      xAxis: {
+        data: names
+      }, 
+      series: [{
+        name: '温度',
+        data: nums
+      }]
+    })
+    let id = 'chart' + this.chartIndex
+    EleResize.on(document.querySelector('#' + id), () => {
+      this.$chart.resize()
+    })
   },
   beforeDestroy () {
     if (!this.$chart) {
       return
-    }
-    if (this.autoResize) {
-      window.removeEventListener('resize', this.__resizeHanlder)
     }
 
     this.$chart.dispose()
@@ -75,9 +73,10 @@ export default {
 </script>
 
 <style>
-.echarts{
-  width: 200px;
-  height: 100px;
+.echarts {
+  /* width: 450px; */
+  width: 530px;
+  height: 250px;
   position: absolute;
 }
 </style>

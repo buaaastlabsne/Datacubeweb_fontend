@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Layout from '../views/Layout/Layout.vue'
 import DCConfig from '../views/Configuration/DCConfig.vue'
 import DCManage from '../views/Configuration/DCManage.vue'
+import DBConfig from '../views/Configuration/DBConfig.vue'
 import OLAPCreate from '../views/Analysis/OLAPCreate.vue'
 import OLAPDashboard from '../views/Analysis/OLAPDashboard.vue'
 import DataMining from '../views/DataMining/DataMining.vue'
@@ -20,6 +21,10 @@ export default new Router({
       component: Layout,
       redirect:'/configuration/datacubeconfig',
       children:[
+        {
+          path:'/configuration/databaseconfig',
+          component:DBConfig,
+        },
         {
           path:'/configuration/datacubeconfig',
           component:DCConfig,
