@@ -1,6 +1,6 @@
 <template>
   <div class="dcconfig-wrapper">
-    <swiper :options="swiperOption" ref="diymySwiper" @someSwiperEvent="callback">
+    <swiper :options="swiperOption" ref="mySwiper">
       <!-- slides -->
       <swiper-slide>
         <div class="step-header">第一步：选择数据立方主题</div>
@@ -197,7 +197,7 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.mySwiper.swiper
+      return this.$refs.mySwiper
     }
   },
   components: {
