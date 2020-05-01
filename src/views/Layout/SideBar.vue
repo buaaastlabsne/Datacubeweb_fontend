@@ -73,6 +73,15 @@
             <span class="menu-name">数据挖掘</span>
           </a>
         </router-link>
+        <ul>
+          <router-link tag="li" class="menu-item no-sub-menu sub-item" :to="`/datamining/${algorithm.algorithmId}`"
+           v-for="algorithm in algorithms" :key="algorithm.algorithmId">
+            <a class="menu-link">
+              <span class="iconfont icon-dashboard"></span>
+              <span class="menu-name">{{ algorithm.algorithmName }}</span>
+            </a>
+          </router-link>
+        </ul>
       </template>    
     </ul>
   </div>
@@ -93,7 +102,8 @@ export default {
       return this.$route.path.split('/')[1]
     },
     ...mapState({
-      dashboards: state => state.analysis.dashboards
+      dashboards: state => state.analysis.dashboards,
+      algorithms: state => state.datamining.algorithms
     })
   }
 }

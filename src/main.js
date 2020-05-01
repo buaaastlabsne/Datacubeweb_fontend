@@ -8,6 +8,7 @@ import store from './store'
 import '@/utils/iconfont.js'
 
 import {
+  Input,
   Container,
   Header,
   Aside,
@@ -37,6 +38,7 @@ import {
 } from 'element-ui'
 
 Vue.config.productionTip = false
+Vue.use(Input)
 Vue.use(Container)
 Vue.use(Header)
 Vue.use(Aside)

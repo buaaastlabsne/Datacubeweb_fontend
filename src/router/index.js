@@ -62,6 +62,10 @@ export default new Router({
         {
           path:'/datamining',
           component:DataMining
+        },
+        {
+          path: '/datamining/:algorithmId',
+          component: DataMining
         }
       ]
     }

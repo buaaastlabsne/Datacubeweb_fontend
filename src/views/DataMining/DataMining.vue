@@ -8,7 +8,7 @@
           <span class="iconfont icon-arrow-right" v-else @click="expand1 = !expand1"></span>
         </div>
         <div class="data-input-content" v-if="expand1">
-          shuju
+          <el-select v-model="dataSource" placeholder="请选择源数据" style="width: 40%;"><el-option label="TPV温压风数据场-高度500米切片" value="1"></el-option></el-select>
         </div>
       </el-card>
       <el-card class="data-input">
@@ -18,7 +18,7 @@
           <span class="iconfont icon-arrow-right" v-else @click="expand2 = !expand2"></span>
         </div>
         <div class="data-input-content" v-if="expand2">
-          canshu
+          聚类中心数：<el-input style="width: 20%;" v-model="params"></el-input>
         </div>
       </el-card>
     </div>
@@ -27,7 +27,7 @@
         <span>数据挖掘结果</span>
       </div>
       <div class="data-input-content">
-        <el-table
+        <!-- <el-table
           :data="bookList"
           style="width: 100%" v-loading="loading">
           <el-table-column
@@ -48,7 +48,7 @@
             prop="add_time"
             label="添加时间">
           </el-table-column>
-        </el-table>
+        </el-table> -->
       </div>
     </el-card>
   </div>
@@ -63,7 +63,7 @@ export default {
     return{
       expand1: true,
       expand2: true,
-      loading: true
+      loading: true,
       // bookList: [
       //   {
       //       'pk': 1,
@@ -78,6 +78,8 @@ export default {
       //       'add_time': '2020年1月17日'
       //   }
       // ]
+      dataSource: '',
+      params: ''
     }
   },
   methods: {
@@ -96,7 +98,7 @@ export default {
 
 <style scoped>
   .data-input{
-    width:650px;
+    width:730px;
     margin:10px;
   }
   .clearfix:before,
@@ -118,5 +120,7 @@ export default {
   }
   .data-result{
     margin: 0 10px;
+    width: 1480px;
+    height: 630px;
   }
 </style>

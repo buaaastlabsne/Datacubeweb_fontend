@@ -30,10 +30,17 @@
 
 <script>
 import SideBar from './SideBar.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components:{
     SideBar
+  },
+  methods: {
+    ...mapActions(['getWind0']),
+  },
+  mounted () {
+    this.getWind0()
   },
   computed:{
     routeFirst:function () {
