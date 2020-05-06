@@ -6,7 +6,6 @@ import router from './router'
 import 'element-ui/lib/theme-chalk/index.css'
 import store from './store'
 import '@/utils/iconfont.js'
-import VueHighlightJS from 'vue-highlightjs'
 
 import {
   Input,
@@ -36,7 +35,8 @@ import {
   Tree,
   Dialog,
   Radio,
-  Switch
+  Switch,
+  Slider
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -68,7 +68,7 @@ Vue.use(Progress)
 Vue.use(Dialog)
 Vue.use(Radio)
 Vue.use(Switch)
-Vue.use(VueHighlightJS)
+Vue.use(Slider)
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$confirm = MessageBox.confirm

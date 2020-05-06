@@ -1,3 +1,5 @@
+import restapi from '@/api/restapi'
+
 const configs = {
   state: {
     atmosphereTheme: [
@@ -38,55 +40,93 @@ const configs = {
       'HEIGHT': ['HT_10000', 'HT_5000', 'HT_1000', 'HT_500', 'HT_100'],
       'DEPTH': ['DEP_2000', 'DEP_1000', 'DEP_500', 'DEP_100', 'DEP_50']
     },
-    dataCubeFiles: [
-      {
-        name: 'TPV10',
-        xmlContents: '<Schema></Schema>',
-        treeData: [
-          {
-            label: 'Cube-TPV',
-            children: [
-              {
-                label: 'Dimension-TimeDim',
-                children: [
-                  {
-                    label: 'Level-year'
-                  },
-                  {
-                    label: 'Level-quarter'
-                  },
-                  {
-                    label: 'Level-month'
-                  }
-                ]
-              },
-              {
-                label: 'Dimension-LongitudeDim',
-                children: [
-                  {
-                    label: 'Level-lon_10'
-                  },
-                  {
-                    label: 'Level-lon_2'
-                  }
-                ]
-              }, {
-                label: 'Measure-Temperature(avg)'
-              }, {
-                label: 'Measure-Pressure(avg)'
-              },
-            ]
-          }
-        ],
-        menuVisible: false
-      },
-      {
-        name: 'TPV20',
-        xmlContents: '',
-        treeData: [],
-        menuVisible: false
-      }
-    ]
+    // dataCubeFiles: [
+    //   {
+    //     name: 'TPV10',
+    //     xmlContents: '<Schema></Schema>',
+    //     treeData: [
+    //       {
+    //         label: 'Cube-TPV',
+    //         children: [
+    //           {
+    //             label: 'Dimension-TimeDim',
+    //             children: [
+    //               {
+    //                 label: 'Level-year'
+    //               },
+    //               {
+    //                 label: 'Level-quarter'
+    //               },
+    //               {
+    //                 label: 'Level-month'
+    //               }
+    //             ]
+    //           },
+    //           {
+    //             label: 'Dimension-LongitudeDim',
+    //             children: [
+    //               {
+    //                 label: 'Level-lon_10'
+    //               },
+    //               {
+    //                 label: 'Level-lon_2'
+    //               }
+    //             ]
+    //           }, {
+    //             label: 'Measure-Temperature(avg)'
+    //           }, {
+    //             label: 'Measure-Pressure(avg)'
+    //           },
+    //         ]
+    //       }
+    //     ],
+    //     menuVisible: false
+    //   },
+    //   {
+    //     name: 'TPV20',
+    //     xmlContents: '',
+    //     treeData: [],
+    //     menuVisible: false
+    //   }
+    // ],
+    dataCubeFiles: []
+  },
+  mutations: {
+    GET_PATH_NAMES: (state, data) => state.dataCubeFiles = data
+  },
+  actions: {
+    getNames: ({ commit }, theme) => {
+      return new Promise((resolve, reject) => {
+        let postBody = new FormData()
+        postBody.set('theme', theme)
+        restapi.request({
+          method: 'post',
+          url: `/api/names`,
+          data: postBody,
+          success: sdata => {
+            commit('GET_PATH_NAMES', sdata)
+            resolve(sdata)
+          },
+          error: reject
+        })
+      })
+    },
+    deleteXMLFile: ({ commit }, address) => {
+      return new Promise((resolve, reject) => {
+        let postBody = new FormData()
+        postBody.set('address', address)
+        restapi.request({
+          method: 'post',
+          url: `/api/delete`,
+          data: postBody,
+          success: sdata => {
+            commit('GET_PATH_NAMES', sdata)
+            resolve(sdata)
+          },
+          error: reject
+        })
+      })
+    }
   }
 }
 

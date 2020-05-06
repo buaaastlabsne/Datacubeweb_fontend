@@ -59,17 +59,17 @@
             <span class="iconfont icon-download item-icons" @click="downloadPrompt"></span>
             <span class="iconfont icon-DataAnalysisAI-M-OLAP item-icons" @click="olapPrompt"></span>
           </div>
-          <div class="grid-item-content" :id="'grid-item-' + testLayout[2].i"><echarts-scatter :chartData="option2" :chartIndex="testLayout[2].i"></echarts-scatter></div>  
+          <div class="grid-item-content" :id="'grid-item-' + testLayout[2].i"><echarts-scatter :chartData="option2" :chartIndex="testLayout[2].i" :loading="loading0"></echarts-scatter></div>  
         </grid-item>
-        <grid-item :x="testLayout[3].x" :y="testLayout[3].y" :w="testLayout[3].w" :h="testLayout[3].h" :i="testLayout[3].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
+        <grid-item v-if="clickCount >= 1" :x="testLayout[3].x" :y="testLayout[3].y" :w="testLayout[3].w" :h="testLayout[3].h" :i="testLayout[3].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
           <div class="grid-item-header">
             {{ testLayout[3].i + ' ' }}
             <span class="iconfont icon-download item-icons" @click="downloadPrompt"></span>
             <span class="iconfont icon-DataAnalysisAI-M-OLAP item-icons" @click="olapPrompt"></span>
           </div>
-          <div class="grid-item-content" :id="'grid-item-' + testLayout[3].i"></div>  
+          <div class="grid-item-content" :id="'grid-item-' + testLayout[3].i"><echarts-scatter :chartData="option3" :chartIndex="testLayout[3].i"></echarts-scatter></div>  
         </grid-item>
-        <!-- <grid-item :x="testLayout[4].x" :y="testLayout[4].y" :w="testLayout[4].w" :h="testLayout[4].h" :i="testLayout[4].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
+        <grid-item v-if="clickCount >= 2" :x="testLayout[4].x" :y="testLayout[4].y" :w="testLayout[4].w" :h="testLayout[4].h" :i="testLayout[4].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
           <div class="grid-item-header">
             {{ testLayout[4].i + ' ' }}
             <span class="iconfont icon-download item-icons" @click="downloadPrompt"></span>
@@ -77,14 +77,14 @@
           </div>
           <div class="grid-item-content" :id="'grid-item-' + testLayout[4].i"><echarts-scatter :chartData="option4" :chartIndex="testLayout[4].i"></echarts-scatter></div>  
         </grid-item>
-         <grid-item :x="testLayout[5].x" :y="testLayout[5].y" :w="testLayout[5].w" :h="testLayout[5].h" :i="testLayout[5].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
+        <grid-item v-if="clickCount >= 3" :x="testLayout[5].x" :y="testLayout[5].y" :w="testLayout[5].w" :h="testLayout[5].h" :i="testLayout[5].i" dragAllowFrom=".grid-item-header" @resized="itemResize">
           <div class="grid-item-header">
             {{ testLayout[5].i + ' ' }}
             <span class="iconfont icon-download item-icons" @click="downloadPrompt"></span>
             <span class="iconfont icon-DataAnalysisAI-M-OLAP item-icons" @click="olapPrompt"></span>
           </div>
           <div class="grid-item-content" :id="'grid-item-' + testLayout[5].i"><echarts-scatter :chartData="option5" :chartIndex="testLayout[5].i"></echarts-scatter></div>  
-        </grid-item> -->
+        </grid-item>
       </grid-layout>
     </div>
     <el-dialog
@@ -106,23 +106,23 @@
     <el-dialog
       title="❉ 多维分析操作"
       :visible.sync="dialogVisible1"
-      width="50%">
+      width="55%">
       <div class="olap-style">
         <el-card class="olap-item slice-dice">
           <div slot="header" class="clearfix">
             <span class="iconfont icon-slice45"> 切片、切块</span>
-            <el-button style="float: right; padding: 3px 0" type="primary">生成MDX语句</el-button>
+            <el-button style="float: right; padding: 3px 0" type="primary" @click="genMDX">生成MDX语句</el-button>
           </div>
           <div>
             <ul>
               <li class="li-title">时间范围</li>
-              <li><input class="input-left" type="text"><span class="zhi">至</span><input type="text" class="input-right" ></li>
+              <li><input class="input-left" type="text" v-model="tsscope.timeStart" /><span class="zhi">至</span><input type="text" class="input-right" v-model="tsscope.timeEnd" /></li>
               <li class="li-title">经度范围</li>
-              <li><input class="input-left" type="text"><span class="zhi">至</span><input type="text" class="input-right" ></li>
+              <li><input class="input-left" type="text" v-model="tsscope.longitudeStart" /><span class="zhi">至</span><input type="text" class="input-right" v-model="tsscope.longitudeEnd" /></li>
               <li class="li-title">纬度范围</li>
-              <li><input class="input-left" type="text"><span class="zhi">至</span><input type="text" class="input-right" ></li>
+              <li><input class="input-left" type="text" v-model="tsscope.latitudeStart" /><span class="zhi">至</span><input type="text" class="input-right"  v-model="tsscope.latitudeEnd" /></li>
               <li class="li-title">高度范围</li>
-              <li><input class="input-left" type="text"><span class="zhi">至</span><input type="text" class="input-right" ></li>
+              <li><input class="input-left" type="text" v-model="tsscope.heightStart" /><span class="zhi">至</span><input type="text" class="input-right" v-model="tsscope.heightEnd" /></li>
               <li class="li-title">深度范围</li>
               <li><input class="input-left" type="text"><span class="zhi">至</span><input type="text" class="input-right" ></li>
             </ul>
@@ -202,12 +202,12 @@
       <el-card class="mdx-generator">
         <div class="dim-title">生成的MDX语句</div>
         <div>
-          <textarea name="mdx-query" id="1" cols="30" rows="3" class="mdx-query"></textarea>
+          <textarea name="mdx-query" id="1" cols="30" rows="3" class="mdx-query" v-model="mdx"></textarea>
         </div>
       </el-card> 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible1 = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible1 = false">执行操作</el-button>
+        <el-button type="primary" @click="dialogVisible1 = false, clickCount += 1">执行操作</el-button>
       </span>
     </el-dialog>
   </div>
@@ -223,6 +223,7 @@ import dtc2 from '@/assets/dataset/dtc2.js'
 import { mapState } from 'vuex'
 import 'echarts-gl'
 import axios from 'axios'
+import { successTip } from '@/utils/common.js'
 
 export default {
   components: {
@@ -261,22 +262,36 @@ export default {
       longitudeDic: ['10度分区','2度分区', '1度分区', '0.2度分区'],
       latitudeDic: ['10度分区','2度分区', '1度分区', '0.2度分区'],
       heightDic: ['10000米分区', '5000米分区', '1000米分区', '500米分区', '100米分区'],
-      depthDic: ['2000米分区', '1000米分区', '500米分区', '100米分区', '50米分区']
+      depthDic: ['2000米分区', '1000米分区', '500米分区', '100米分区', '50米分区'],
+      mdx: '',
+      clickCount: 0,
+      loading0: false,
+      tsscope: {
+        timeStart: '2011-4-28-12',
+        timeEnd: '2011-4-28-14',
+        longitudeStart: '108°E',
+        longitudeEnd: '116°E',
+        latitudeStart: '15°N',
+        latitudeEnd: '23°N',
+        heightStart: '5000m',
+        heightEnd: '20000m'
+      }
     }
   },
   mounted () {
     this.option0 = this.getLineOption()
     this.option1 = this.getBarOption()
-    let that = this
     axios.get('http://127.0.0.1:8000/api/windtp')
       .then(response => {
+        debugger
         let windtp = response.data.data
-        that.option2 = that.getScatterOption(windtp, [108, 116, 15, 23, 0, 20000])
-        that.option3 = that.getScatterOption(windtp, [108, 116, 15, 23, 1000, 1000])
-        that.option4 = that.getScatterOption(windtp, [108, 116, 15, 23, 5000, 5000])
-        this.option5 = that.getScatterOption(windtp, [108, 116, 15, 23, 5000, 10000])
+        this.option2 = this.getScatterOption(windtp, [108, 116, 15, 23, 0, 20000])
+        this.option3 = this.getScatterOption(windtp, [108, 116, 15, 23, 1000, 1000])
+        this.option4 = this.getScatterOption(windtp, [108, 116, 15, 23, 5000, 5000])
+        this.option5 = this.getScatterOption(windtp, [108, 116, 15, 23, 5000, 10000])
       })
       .catch(error => {
+
       })
   },
   methods: {
@@ -368,6 +383,10 @@ export default {
           data: nums
         }]
       }
+    },
+    genMDX () {
+      this.mdx = 'AVG([Measures].[Temperature] SELECT {[Measures].[Temperature]} ON COLUMNS, {[TimeDim].[AllTime], [Longitude].[AllLongitude]' 
+      + '[Latitude].[AllLatitude]} ON ROWS FROM [TPV] WHERE ([HeightDim].[5000])'
     },
     // getOption1 () {
     //   let data = []
@@ -725,6 +744,7 @@ export default {
     },
     downloadPrompt () {
       this.dialogVisible = true
+      successTip(this, '保存成功！')
     },
     olapPrompt () {
       this.dialogVisible1 = true
@@ -747,9 +767,9 @@ export default {
         this.$nextTick(() => {
           var elem = document.querySelector('.graph-content-wrapper')
           if(newval){
-            elem.style.right  = '60px'
+            elem.style.right  = '70px'
           }else{
-            elem.style.right  = '21px'
+            elem.style.right  = '20px'
           }
         })
       },
@@ -764,11 +784,11 @@ export default {
     top: 10px;
     left: 10px;
     position: absolute;
-    right: 60px;
+    right: 75px;
   }
   .graph-style-wrapper{
     top: 70px;
-    right: 0px;
+    right: 15px;
     bottom: 20px;
     position: fixed;
     border: 1px #DFE2EE solid;
@@ -852,7 +872,7 @@ export default {
     width: 34%;
   }
   .roll-drill {
-    width: 39%;
+    width: 40%;
   }
   .rotate {
     width: 25%;

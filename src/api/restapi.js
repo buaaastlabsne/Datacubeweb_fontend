@@ -13,7 +13,7 @@ export default {
     })
     .then(response => {
       // if (response.data.code < 300) {
-        typeof request.success === 'function' && request.success(response.data.data)
+        typeof request.success === 'function' && request.success(response.data)
       // } else {
       //   typeof request.error === 'function' && request.error(response.data)
       // }

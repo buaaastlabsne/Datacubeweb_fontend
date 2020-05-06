@@ -14,6 +14,9 @@ export default {
     },
     chartIndex: {
       type: String
+    },
+    loading: {
+      type: Boolean
     }
   },
   data () {
@@ -30,7 +33,6 @@ export default {
     if (!this.$chart) {
       return
     }
-
     this.$chart.dispose()
     this.$chart = null
   },
@@ -39,6 +41,11 @@ export default {
       deep: true,
       handler (val) {
         this.setOptions(val)
+      }
+    },
+    loading: {
+      handler (val) {
+        val ? this.$chart.showLoading() : this.$chart.hideLoading()
       }
     }
   },
@@ -59,8 +66,8 @@ export default {
 <style>
 .echarts {
   /* width: 450px; */
-  width: 440px;
-  height: 225px;
+  width: 420px;
+  height: 250px;
   position: absolute;
 }
 </style>

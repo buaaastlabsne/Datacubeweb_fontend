@@ -35,8 +35,7 @@
 
 <script>
 import ShowCard from '@/components/ShowCard.vue'
-import vkbeautify from 'vkbeautify'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { confirmTip } from '@/utils/common'
 
 export default {
@@ -47,18 +46,22 @@ export default {
         label: 'label'
       },
       curXML: '',
-      curTreeData: []
+      curTreeData: [],
+      theme: ''
     }
   }, 
   components: {
     ShowCard
   },
   mounted () {
-    
+    // debugger
+    this.theme = this.$route.params.category
+    this.getNames(this.theme)
   },
   methods: {
+    ...mapActions(['getNames', 'deleteXMLFile']),
     scanFile (witch) {
-      this.curXML = this.dataCubeFiles[witch].xmlContents
+      this.curXML = this.dataCubeFiles[witch].xmlStr
       this.curTreeData = this.dataCubeFiles[witch].treeData
     },
     deleteFile (witch) {
@@ -66,18 +69,31 @@ export default {
         boxType: 'confirm',
         body:  this.dataCubeFiles[witch].name + '?',
         head: '确定删除数据立方文件：',
-        callback: () => {},
+        callback: () => {
+          let fileName = this.theme2FilePath(this.theme)
+          fileName += this.dataCubeFiles[witch].name
+          this.deleteXMLFile()
+        },
         success: () => {
           this.dataCubeFiles.splice(witch, 1)
           this.curXML = ''
           this.curTreeData = []
         },
-        cancel: () => {
-          this.dbConnections[witch].status = !this.dbConnections[witch].status
-        },
+        cancel: () => {},
         successMessage: '删除成功',
         cancelMessage: '已取消操作'
       })
+    },
+    theme2FilePath (theme) {
+      if (theme == 'atmosphere') {
+        return 'D:/综合自然环境数据立方库/大气环境/'
+      } else if (theme == 'ocean') {
+        return 'D:/综合自然环境数据立方库/海洋环境/'
+      } else if (theme == 'land') {
+        return 'D:/综合自然环境数据立方库/地形环境/'
+      } else {
+        return 'D:/综合自然环境数据立方库/空间环境/'
+      }
     }
   },
   computed: {
@@ -128,6 +144,7 @@ export default {
   .scan-style {
     width: 560px;
     height: 360px;
+    overflow: auto;
   }
   .show-style-card {
     margin-right: 20px;
