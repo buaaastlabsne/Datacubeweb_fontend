@@ -2,29 +2,15 @@
   <div class="dc-manage-wrapper">
     <show-card :title="'大气数据立方文件'" :expand="true">
       <div slot="card-content" style="width: 1200px;">
-        <div class="datacube-file">
+        <div class="datacube-file" v-for="(item, index) in dataCubeFiles" :key="index" @mouseover="item.menuVisible = true" @mouseleave=" item.menuVisible = false">
           <svg class="icon" aria-hidden="true" font-size="60px">
             <use xlink:href="#icon-file"></use>
           </svg>
-          <div style="text-align: center;">北半球标准大气</div>
-        </div>
-        <div class="datacube-file">
-          <svg class="icon" aria-hidden="true" font-size="60px">
-            <use xlink:href="#icon-file"></use>
-          </svg>
-          <div style="text-align: center;">大气风场</div>
-        </div>
-        <div class="datacube-file">
-          <svg class="icon" aria-hidden="true" font-size="60px">
-            <use xlink:href="#icon-file"></use>
-          </svg>
-          <div style="text-align: center;">G365.2标准风场</div>
-        </div>
-        <div class="datacube-file">
-          <svg class="icon" aria-hidden="true" font-size="60px">
-            <use xlink:href="#icon-file"></use>
-          </svg>
-          <div style="text-align: center;">TPV温压风数据场</div>
+          <div style="text-align: center;">{{ item.name }}</div>
+          <div class="file-opr-menu" v-if="item.menuVisible">
+            <span class="iconfont icon-Roll" @click="scanFile(index)"></span>
+            <span class="iconfont icon-delete" @click="deleteFile(index)"></span>
+          </div>
         </div>
       </div>     
     </show-card>
@@ -32,14 +18,14 @@
       <show-card :title="'xml查看方式'" :expand="false">
         <div slot="card-content">
           <div class="scan-style">
-            <textarea name="xmlstyle" id="" cols="30" rows="10" class="xml-style-textarea"></textarea>
+            <textarea name="xmlstyle" id="" cols="30" rows="10" class="xml-style-textarea" v-model="curXML"></textarea>
           </div>
         </div>
       </show-card>
       <show-card :title="'树形查看方式'" :expand="false" class="show-style-card">
         <div slot="card-content">
           <div class="scan-style">
-            <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick" expand="true"></el-tree>
+            <el-tree :data="curTreeData" :props="defaultProps" expand="true"></el-tree>
           </div>
         </div>
       </show-card>
@@ -49,54 +35,55 @@
 
 <script>
 import ShowCard from '@/components/ShowCard.vue'
+import vkbeautify from 'vkbeautify'
+import { mapState } from 'vuex'
+import { confirmTip } from '@/utils/common'
 
 export default {
   data () {
     return {
-      treeData: [
-        {
-          label: 'Cube-TPV',
-          children: [
-            {
-              label: 'Dimension-TimeDim',
-              children: [
-                  {
-                    label: 'Level-year'
-                  },
-                  {
-                    label: 'Level-quarter'
-                  },
-                  {
-                    label: 'Level-month'
-                  }
-              ]
-            },
-            {
-              label: 'Dimension-LongitudeDim',
-              children: [
-                {
-                  label: 'Level-lon_10'
-                },
-                {
-                  label: 'Level-lon_2'
-                }
-              ]
-            },{
-              label: 'Measure-Temperature(avg)'
-            },{
-              label: 'Measure-Pressure(avg)'
-            },
-          ]
-        }
-      ],
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      curXML: '',
+      curTreeData: []
     }
   }, 
   components: {
     ShowCard
+  },
+  mounted () {
+    
+  },
+  methods: {
+    scanFile (witch) {
+      this.curXML = this.dataCubeFiles[witch].xmlContents
+      this.curTreeData = this.dataCubeFiles[witch].treeData
+    },
+    deleteFile (witch) {
+      confirmTip(this, {
+        boxType: 'confirm',
+        body:  this.dataCubeFiles[witch].name + '?',
+        head: '确定删除数据立方文件：',
+        callback: () => {},
+        success: () => {
+          this.dataCubeFiles.splice(witch, 1)
+          this.curXML = ''
+          this.curTreeData = []
+        },
+        cancel: () => {
+          this.dbConnections[witch].status = !this.dbConnections[witch].status
+        },
+        successMessage: '删除成功',
+        cancelMessage: '已取消操作'
+      })
+    }
+  },
+  computed: {
+    ...mapState({
+      dataCubeFiles: state => state.configs.dataCubeFiles
+    })
   }
 }
 </script>
@@ -149,5 +136,22 @@ export default {
     border:2px solid #faf8f8;
     width: 100%;
     height: 100%;
+  }
+  .file-opr-menu {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    z-index: 100;
+    transform: translateY(-75px) translateX(20px);
+    display: flex;
+    justify-content: space-between;
+    /* background: #faf8f8;
+    opacity: 0.8; */
+  }
+  .file-opr-menu .icon-delete, .file-opr-menu .icon-Roll{
+    font-size: 30px;
+  }
+  .file-opr-menu .icon-delete:hover, .file-opr-menu .icon-Roll:hover {
+    background: #3f8ce8;
   }
 </style>

@@ -5,15 +5,11 @@ const datamining = {
     bookList: [],
     algorithms: [
       {
-        algorithmId: 'fafafeegwg1341',
-        algorithmName: 'K-means聚类分析',
-      },
-      {
-        algorithmId: 'fagagteege2344',
+        algorithmId: 'FCM',
         algorithmName: 'FCM聚类分析'
       },
       {
-        algorithmId: 'fafafeegwg313',
+        algorithmId: 'SVR',
         algorithmName: 'SVR预测回归',
       }
     ],

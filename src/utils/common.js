@@ -78,16 +78,12 @@ export function successTip (self, successMessage) {
   })
 }
 
-export function errorTip (self, error, errorMessage) {
-  let message = translate(error.message || error.msg || '出错了，请重试')
-  console.log(error, message)
+export function errorTip (self, errorMessage) {
   self.$message({
     type: 'error',
-    message: errorMessage || message,
-    center: true,
-    duration: (error.message && error.message.indexOf('Network Error') !== -1) ? 8000 : 3000
+    message: errorMessage,
+    center: true
   })
-  return message
 }
 
 /**

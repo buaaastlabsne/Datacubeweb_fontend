@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const service = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api'
+  baseURL: 'http://127.0.0.1:8000'
 })
 
 export default {
@@ -12,11 +12,11 @@ export default {
       data: request.data,
     })
     .then(response => {
-      if (response.data.code < 300) {
+      // if (response.data.code < 300) {
         typeof request.success === 'function' && request.success(response.data.data)
-      } else {
-        typeof request.error === 'function' && request.error(response.data)
-      }
+      // } else {
+      //   typeof request.error === 'function' && request.error(response.data)
+      // }
     })
     .catch(error => {
       typeof request.error === 'function' && request.error(error)
