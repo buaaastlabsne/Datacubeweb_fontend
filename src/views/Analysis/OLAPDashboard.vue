@@ -106,7 +106,7 @@
     <el-dialog
       title="❉ 多维分析操作"
       :visible.sync="dialogVisible1"
-      width="55%">
+      width="58%">
       <div class="olap-style">
         <el-card class="olap-item slice-dice">
           <div slot="header" class="clearfix">
@@ -927,7 +927,7 @@ export default {
   .dim-select {
     width: 80px;
     position: relative;
-    left: 20px;
+    left: 0px;
     top: 20px;
   }
   .dashboard-wrapper .el-dialog {
