@@ -7,6 +7,7 @@ import DBConfig from '../views/Configuration/DBConfig.vue'
 import OLAPCreate from '../views/Analysis/OLAPCreate.vue'
 import OLAPDashboard from '../views/Analysis/OLAPDashboard.vue'
 import DataMining from '../views/DataMining/DataMining.vue'
+import Demo from '../views/DataMining/Demo.vue'
 
 Vue.use(Router)
 
@@ -64,8 +65,12 @@ export default new Router({
           component:DataMining
         },
         {
-          path: '/datamining/:algorithmId',
+          path: '/datamining/SVR',
           component: DataMining
+        },
+        {
+          path: '/datamining/FCM',
+          component: Demo
         }
       ]
     }

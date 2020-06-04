@@ -68,7 +68,7 @@
         <li>
           <div class="agrithm-config-title">数据源选择：</div>
           <el-select name="select1" id="select1" v-model="curInput.dataSource">
-            <el-option value="海流速度h3断面层定点">海流速度h3断面层定点</el-option>
+            <el-option v-for="(item, key) in curInput.inputOptions" :key="key" :value="item">{{ item }}</el-option>
           </el-select>
         </li>
       </ul>
@@ -132,7 +132,8 @@ export default {
     return{
       loading: true,
       curInput: {
-        dataSource: ''
+        dataSource: '',
+        inputOptions: []
       },
       curParams: {
         pywtFunc: '',
@@ -286,17 +287,28 @@ export default {
   },
   methods: {
     configInput () {
+      restapi.request({
+        method: 'get',
+        url: `/inputlist`,
+        success: (data) => {
+          this.curInput.inputOptions = data.data
+        }
+      })
       this.dialogVisible1 = true
     },
     configParam () {
       this.dialogVisible2 = true
     },
     startAlgorithm () {
+      // 搜集请求参数信息
       let postData1 = new FormData()
       postData1.set('address', "D:/综合自然环境数据立方库/数据产品/T2017T-S7515S_rec.xlsx")
+      // 算法执行中的动画
       this.loading0 = true
       this.loading1 = true
       this.loading2 = true
+      // 调用执行算法api
+      // http请求：/ep
       restapi.request({
         method: 'post',
         url: `/ep`,
@@ -320,7 +332,7 @@ export default {
         }
       })
       let postData2 = new FormData()
-      postData2.set('address', 'D:/综合自然环境数据立方库/数据产品/T2017T-S7515S_rec.xlsx')
+      postData2.set('address', 'D:/综合自然环境数据立方库/数据产品/wind_speed_rec.xlsx')
       postData2.set('ep', this.curParams.ep)
       postData2.set('c', this.curParams.C)
       restapi.request({
@@ -336,7 +348,7 @@ export default {
       })
       let postData3 = new FormData()
       postData3.set('address1', 'D:/综合自然环境数据立方库/数据产品/T2017T-S7515S_new.csv')
-      postData3.set('address2', 'D:/综合自然环境数据立方库/数据产品/T2017T-S7515S_rec.xlsx')
+      postData3.set('address2', 'D:/综合自然环境数据立方库/数据产品/wind_speed_rec.xlsx')
       restapi.request({
         method: 'post',
         url: `/pywt`,
