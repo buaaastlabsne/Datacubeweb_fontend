@@ -19,3 +19,170 @@ body {
   fill: currentColor;
   overflow: hidden;
 }
+
+.graph-content-wrapper{
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  right: 75px;
+}
+.graph-style-wrapper{
+  top: 70px;
+  right: 10px;
+  bottom: 20px;
+  position: fixed;
+  border: 1px #DFE2EE solid;
+  border-radius: 5px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.22);
+  display: flex;
+}
+.graph-content-expand{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.grid-item-header{
+  height: 10%;
+  line-height: 24px;
+  padding-left: 10px;
+  background: #EBEEF5;
+}
+.grid-item-content{
+  height: 90%;
+  /* width: 100%; */
+  margin-bottom: 0;
+  padding: 0 10px;
+  border: 1px #EBEEF5 solid;
+}
+.icon-rightarrow8f:hover, .icon-leftarrow8f:hover{
+  color: #409eff;
+}
+.icon-line-chart, .icon-bar-chart, .icon-pie-chart, .icon-3D, .icon-map-chart{
+  padding: 10px 10px 10px 5px;
+  font-size: 24px;
+}
+.icon-line-chart:hover, .icon-bar-chart:hover, 
+.icon-pie-chart:hover, .icon-3D:hover, .icon-map-chart:hover{
+  background-color:#F5F7FA;
+  color: #409eff;
+}
+.item-icons {
+  line-height: 20px;
+  cursor: pointer;
+  float: right;
+  margin: 2px 10px;
+}
+.item-icons:hover {
+  border: 1px solid #409eff;
+}
+.olap-style {
+  width: 100%;
+  height: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.olap-item {
+  width: 32%;
+}
+.olap-item ul {
+  list-style: none;
+}
+.olap-item li {
+  line-height: 30px;
+  vertical-align: middle;
+}
+.mdx-generator {
+  width: 100%;
+  height: 130px;
+}
+/* .el-input {
+  height: 15px;
+} */
+.input-left {
+  width: 100px;
+  float: left;
+}
+.input-right {
+  width: 100px;
+  float: right;
+}
+.slice-dice {
+  width: 34%;
+}
+.roll-drill {
+  width: 40%;
+}
+.rotate {
+  width: 25%;
+}
+.zhi {
+  margin-left: 10px;
+  position: relative;
+  top: -5px;
+}
+.zhi1 {
+  position: relative;
+  top: -5px;
+}
+.zhi2 {
+  margin-left: 6px;
+  position: relative;
+  top: -5px;
+}
+.li-title {
+  font-weight: 800;
+}
+.roll-drill select {
+  width: 100px;
+  position: relative;
+  top: -5px;
+}
+.roll-drill option {
+  width: 90px;
+  float: left;
+}
+.rotate-dims {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column; 
+}
+
+.rotate-dim {
+  width: 100%;
+  height: 100px;
+  border: 2px solid gray;
+  border-radius: 3px;
+}
+.rotate-dims .icon-rotaterightvariant {
+  font-size: 30px;
+  margin-left: 40px;
+}
+.dim-select {
+  width: 80px;
+  position: relative;
+  left: 0px;
+  top: 20px;
+}
+.dashboard-wrapper .el-dialog {
+  top: -13vh;
+}
+.dim-title {
+  margin-bottom: 10px;
+}
+.measures-cal {
+  margin-bottom: 10px;
+}
+.mdx-query {
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 2px;
+}
+
+.echarts {
+  /* width: 450px; */
+  width: 400px;
+  height: 225px;
+  position: absolute;
+}
