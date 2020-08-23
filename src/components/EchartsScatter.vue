@@ -55,12 +55,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.echarts {
-  /* width: 450px; */
-  width: 440px;
-  height: 225px;
-  position: absolute;
-}
-</style>

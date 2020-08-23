@@ -62,12 +62,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.echarts {
-  /* width: 450px; */
-  width: 420px;
-  height: 250px;
-  position: absolute;
-}
-</style>
