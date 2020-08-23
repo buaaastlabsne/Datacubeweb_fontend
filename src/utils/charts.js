@@ -149,40 +149,40 @@ export function getBarOption (data) {
 }
 
 // 将三维散点数据转换成绘图option的函数
-export function getScatterOption (windData, spacescope) {
-  let lonMin = spacescope[0]
-  let lonMax = spacescope[1]
-  let latMin = spacescope[2]
-  let latMax = spacescope[3]
-  let heightMin = spacescope[4]
-  let heightMax = spacescope[5]
-  let data = []
-  let p = 0
-  let valMin = Infinity
-  let valMax = -Infinity		    
-  for (let k = 0; k <= 40; k++) {
-    for (let j = 0; j <= 40; j++) {                 
-      for (let i = 0; i <= 40; i++) {																				
-        let p = i + j * 110 + k * 5661
-        p = parseInt(p)					
-        let temp = windData[p][0]		
-        if (temp != 10) {		
-          valMax = Math.max(valMax, temp)
-          valMin = Math.min(valMin, temp)
-        }	
-        if((k >= heightMin / 500) && (k <= (heightMax / 500))) {
-          if(j >= ((lonMin - 108) / 0.2) && j <= ((lonMax - 108) / 0.2)) {
-            if(i >= ((latMin - 15) / 0.2) && i <= ((latMax - 15) / 0.2)) { 
-              if(temp == 10) { temp = 23 } 
-              data.push([i, j, k, temp])	
-            }
-          }
-        } else {
-          data.push([i, j, k, -100]);
-        }																											
-      }
-    }   
-  }
+export function getScatterOption (data) {
+  // let lonMin = spacescope[0]
+  // let lonMax = spacescope[1]
+  // let latMin = spacescope[2]
+  // let latMax = spacescope[3]
+  // let heightMin = spacescope[4]
+  // let heightMax = spacescope[5]
+  // let data = []
+  // let p = 0
+  // let valMin = Infinity
+  // let valMax = -Infinity		    
+  // for (let k = 0; k <= 40; k++) {
+  //   for (let j = 0; j <= 40; j++) {                 
+  //     for (let i = 0; i <= 40; i++) {																				
+  //       let p = i + j * 110 + k * 5661
+  //       p = parseInt(p)					
+  //       let temp = windData[p][0]		
+  //       if (temp != 10) {		
+  //         valMax = Math.max(valMax, temp)
+  //         valMin = Math.min(valMin, temp)
+  //       }	
+  //       if((k >= heightMin / 500) && (k <= (heightMax / 500))) {
+  //         if(j >= ((lonMin - 108) / 0.2) && j <= ((lonMax - 108) / 0.2)) {
+  //           if(i >= ((latMin - 15) / 0.2) && i <= ((latMax - 15) / 0.2)) { 
+  //             if(temp == 10) { temp = 23 } 
+  //             data.push([i, j, k, temp])	
+  //           }
+  //         }
+  //       } else {
+  //         data.push([i, j, k, -100]);
+  //       }																											
+  //     }
+  //   }   
+  // }
 
   return {
     title:{
@@ -198,21 +198,21 @@ export function getScatterOption (windData, spacescope) {
       min:valMin,       
       max:valMax,
       inRange: {
-        symbol:'circle',         //'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
+        symbol:'circle',         
         label:{textStyle:{borderColor:'#000000'}},
         symbolSize: [0.5, 15],
         color: ['#000000','#191970','#000080','#0000CD','#313695', '#4575b4', '#74add1', '#abd9e9', 
         '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],								
-        colorAlpha: [0.8, 1]  //[0.2,1]
+        colorAlpha: [0.8, 1]  
       }
     },
     xAxis3D: {
       name:'北纬（°C）',  				
       type: 'value',
-      axisPointer:{label:{show:true,formatter:function(value,index){return (15+value*0.2);}}},					
+      axisPointer:{label:{show:true,formatter:function(value){return (15+value*0.2);}}},					
       axisLabel:{  
         show:true,
-        formatter: function (value, index) {   
+        formatter: function (value) {   
           return (15+value*0.2); 
         }   
       }
@@ -220,14 +220,14 @@ export function getScatterOption (windData, spacescope) {
     yAxis3D: {				
       type: 'value',
       name:'东经（°C）',
-      axisPointer:{label:{show:true,formatter:function(value,index){return (108+value*0.2);}}},				
+      axisPointer:{label:{show:true,formatter:function(value){return (108+value*0.2);}}},				
       axisTick: {//决定是否显示坐标刻度  				    	
         alignWithLabel: true,
         show:false   
       },
       axisLabel:{  //决定是否显示数据  
         show:true,
-        formatter: function (value, index) {    //value当前值，index当前索引
+        formatter: function (value) {    //value当前值，index当前索引
           return (108+value*0.2);
         }   
       }
@@ -239,7 +239,7 @@ export function getScatterOption (windData, spacescope) {
       axisPointer:{label:{show:true,formatter:function(value,index){return value*500;}}},
       axisLabel:{  //决定是否显示数据  
         show:true,
-        formatter: function (value, index) {    //value当前值，index当前索引
+        formatter: function (value) {    //value当前值，index当前索引
           return (value*500); 
         }   
       } 				
