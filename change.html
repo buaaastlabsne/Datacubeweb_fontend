@@ -1,0 +1,110 @@
+<html>
+<!-- PoPo 数据可视化 PoPoDV.com -->
+<!-- 三维散点图示例 http://www.popodv.com/dv/f5c1af1528809964527.html -->
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>PoPo数据可视化_三维散点图示例</title>
+		<script src="jquery-3.3.1.js"></script>
+		<script src="http://static.popodv.com/dvlibs/echarts/echarts.v4.min.js"></script>
+		<script src="http://static.popodv.com/dvlibs/echarts/echarts-gl.v1.min.js"></script>
+		<style>html,body,#container{width:100%;height:100%;margin:0;padding:0;}</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script>
+
+		var myChart = echarts.init(document.getElementById('container'));
+		
+		//$.get('http://static.popodv.com/data/attr/life-expectancy-table.json', function (data) {
+		$.get('test.json', function (data) {
+			var symbolSize = 22.5;
+			data = [["x","y","z"],[815,34.05,1800],[1314,39,1800]]
+			data2 = [["x","y","z"],[815,34.05,180],[1314,39,180]]
+			data3 = [["x","y","z"],[1,2,3],[4,5,6],[7,8,9]]
+			dt = [[0.12, 0.31, 0.93, 'g'], [0.48, 0.38, 0.57, 'r'], [0.48, 0.52, 0.57, 'b']]
+			option = {
+				grid3D: {},
+				xAxis3D: {
+					type: 'category'
+				},
+				yAxis3D: {},
+				zAxis3D: {},
+				dataset: [{
+					dimensions: [
+						'x',
+						'y',
+						'z',
+						{ name: 'Year', type: 'ordinal' }
+					],
+					source: data
+				},
+				{
+					dimensions: [
+						'x',
+						'y',
+						'z',
+						{ name: 'Year', type: 'ordinal' }
+					],
+					source: data2
+				},
+				{
+					dimensions: [
+						'x',
+						'y',
+						'z',
+						{ name: 'value', type: 'ordinal' }
+					],
+					source: data3
+				}
+				],
+				series: [
+					{ datasetIndex:0,
+						type: 'scatter3D',
+						color:'Red',
+						symbolSize: symbolSize,
+						encode: {
+							x: 'x',
+							y: 'y',
+							z: 'z',
+							tooltip: [0, 1, 2, 3, 4]
+						}												
+					},
+					{ datasetIndex:1,
+						type: 'scatter3D',
+						color:'Green',
+						symbolSize: symbolSize,
+						encode: {
+							x: 'Country',
+							y: 'Income',
+							z: 'Life Expectancy',
+							tooltip: [0, 1, 2, 3, 4]
+						}
+					},
+					{ datasetIndex:2,
+						type: 'scatter3D',
+						color:'Black',
+						symbolSize: symbolSize,
+						encode: {
+							x: 'x',
+							y: 'y',
+							z: 'z',
+							tooltip: [0, 1, 2, 3, 4]
+						}
+					}
+				]
+			};
+
+			myChart.setOption(option);
+
+			
+
+		});
+
+		// 刷新调整
+		window.onresize = function () {
+			myChart.resize();
+		}
+				</script>
+</body>
+</html>
