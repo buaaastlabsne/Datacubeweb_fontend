@@ -22,6 +22,8 @@ const analysis = {
       {
         "list": linedata.list
       },
+      bardata,
+      bardata,
       bardata
     ]
   },

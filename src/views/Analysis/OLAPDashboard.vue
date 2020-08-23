@@ -3,16 +3,16 @@
     <div class="graph-style-wrapper">
       <div class="graph-content-expand"><span class="iconfont" :class="{ 'icon-rightarrow8f': expand, 'icon-leftarrow8f': !expand }" @click=" expand = !expand "></span></div>
       <div class="graph-content-icons" v-if="expand">
-        <div class="iconfont icon-line-chart"></div>
-        <div class="iconfont icon-bar-chart"></div>
-        <div class="iconfont icon-pie-chart"></div>
-        <div class="iconfont icon-3D"></div>
-        <div class="iconfont icon-map-chart"></div>
+        <div class="iconfont icon-line-chart" @click="setData('line')"></div>
+        <div class="iconfont icon-bar-chart" @click="setData('bar')"></div>
+        <div class="iconfont icon-pie-chart" @click="setData('pie')"></div>
+        <div class="iconfont icon-3D" @click="setData('scatter')"></div>
+        <div class="iconfont icon-map-chart" @click="setData('map')"></div>
       </div>
     </div>
     <div class="graph-content-wrapper">
       <grid-layout
-        :layout.sync="graphInfo"
+        :layout.sync="graphItems"
         :col-num="3"
         :row-height="250"
         :is-draggable="true"
@@ -22,7 +22,7 @@
         :margin="[3, 3]"
         :use-css-transforms="true"
       >
-        <grid-item v-for="item in graphInfo"
+        <grid-item v-for="item in graphItems"
           :x="item.x"
           :y="item.y"
           :w="item.w"
@@ -165,6 +165,35 @@
         <el-button @click="dialogVisible1 = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible1 = false, clickCount += 1">执行操作</el-button>
       </span>
+    </el-dialog>    
+    <el-dialog title="数据源配置" :visible.sync="dialogVisible2" width="40%">
+      <ul class="agrithm-config-ul">
+        <li>
+          <div class="agrithm-config-title">数据源选择：</div>
+          <el-select name="select2" id="select2" v-model="dataScope.dataSource"></el-select>
+        </li>
+        <!--<li><div class="agrithm-config-title">时间范围：</div>
+            <el-input class="input-left" v-model="tsscope.settimeStart"/><span class="zhi">至</span>
+            <el-input class="input-right" v-model="tsscope.settimeEnd" /></li>-->
+        <li>
+          <div class="agrithm-config-title">经度范围：</div>
+          <el-input class="input-left" v-model="dataScope.lonMin" /><span class="zhi">至</span>
+          <el-input class="input-right" v-model="dataScope.lonMax" />
+        </li>
+        <li>
+          <div class="agrithm-config-title">纬度范围：</div>
+          <el-input class="input-left" v-model="dataScope.latMin" /><span class="zhi">至</span>
+          <el-input  class="input-right"  v-model="dataScope.latMax" />
+        </li>
+        <li>
+          <div class="agrithm-config-title">高度范围：</div>
+          <el-input class="input-left" v-model="dataScope.heightMin"/><span class="zhi">至</span>
+          <el-input class="input-right" v-model="dataScope.heightMax"/>
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmSetData">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -192,20 +221,21 @@ export default {
   data () {
     return {
       expand: true,
-      graphInfo: [
+      graphItems: [
         // s=showStyle
         { "x": 0, "y": 0, "w": 1, "h": 1, "i": "0", "s": 'line' },
         { "x": 1, "y": 0, "w": 1, "h": 1, "i": "1", "s": 'bar' },
         { "x": 2, "y": 0, "w": 1, "h": 1, "i": "2", "s": 'scatter' },
-        { "x": 0, "y": 1, "w": 1, "h": 1, "i": "3" },
-        { "x": 1, "y": 1, "w": 1, "h": 1, "i": "4" },
-        { "x": 2, "y": 1, "w": 1, "h": 1, "i": "5" },
-        { "x": 0, "y": 2, "w": 1, "h": 1, "i": "6" },
-        { "x": 1, "y": 2, "w": 1, "h": 1, "i": "7" },
-        { "x": 2, "y": 2, "w": 1, "h": 1, "i": "8" }
+        // { "x": 0, "y": 1, "w": 1, "h": 1, "i": "3" },
+        // { "x": 1, "y": 1, "w": 1, "h": 1, "i": "4" },
+        // { "x": 2, "y": 1, "w": 1, "h": 1, "i": "5" },
+        // { "x": 0, "y": 2, "w": 1, "h": 1, "i": "6" },
+        // { "x": 1, "y": 2, "w": 1, "h": 1, "i": "7" },
+        // { "x": 2, "y": 2, "w": 1, "h": 1, "i": "8" }
       ],
       dialogVisible: false,
       dialogVisible1: false,
+      dialogVisible2: false,
       radio: 1,
       radio1: 1,
       timeDic: ['年', '季', '月', '旬', '日', '时'],
@@ -224,7 +254,18 @@ export default {
         latitudeEnd: '23°N',
         heightStart: '5000m',
         heightEnd: '20000m'
-      }
+      },
+      dataScope: {
+        dataSource: '',
+        lonMin: '108°E',
+        lonMax: '116°E',
+        latMin: '15°N',
+        latMax: '23°N',
+        heightMin: '5000m',
+        heightMax: '20000m'
+      },
+      // 当前图例的显示方式
+      showStyle: ''
     }
   },
   methods: {
@@ -259,6 +300,25 @@ export default {
           return getScatterOption(this.dataList[index])
           break
       }
+    },
+    setData (showStyle) {
+      this.dialogVisible2 = true
+      this.showStyle = showStyle
+    },
+    // 从后台获取数据，更新vuex中的dataList，并添加item至graphItems
+    confirmSetData () {
+      // todo：更新vuex内容
+      let lastItem = this.graphItems[this.graphItems.length - 1]
+      let newItem = {
+        "x": parseInt(lastItem.x) === 2 ? 0 : lastItem.x + 1,
+        "y": this.graphItems.length % 3 == 0 ? parseInt(lastItem.y) + 1 : lastItem.y,
+        "w": 1,
+        "h": 1,
+        "i": parseInt(lastItem.i) + 1,
+        "s": this.showStyle
+      }
+      this.graphItems.push(newItem)
+      this.dialogVisible2 = false
     }
   },
   computed: {
@@ -267,6 +327,7 @@ export default {
     })
   },
   watch: {
+    // 右侧工具栏的展开收起处理
     expand: {
       handler(newval, oldval){
         this.$nextTick(() => {
@@ -283,3 +344,24 @@ export default {
   }
 }
 </script>
+<style>
+  .agrithm-config-title {
+    width: 30%;
+  }
+  .agrithm-config-ul {
+    list-style: none;
+  }
+  .agrithm-config-ul li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+  .agrithm-config-title {
+    width: 30%;
+  }
+  .agrithm-config-ul .el-select, .agrithm-config-ul .el-input, .agrithm-config-ul .el-slider {
+    margin-left: 10px;
+    float: right;
+    width: 70%;
+  }
+  </style>
