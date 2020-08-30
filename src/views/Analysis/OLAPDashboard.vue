@@ -310,18 +310,19 @@ export default {
     confirmSetData () {
       // todo：更新vuex内容
       let dataInfo = { "dataSource": "TPV", "scope": this.dataScope, "measure": "temperature" }
-      this.addEnvData(dataInfo)
-      // 推入新的item到graphInfo
-      let lastItem = this.graphItems[this.graphItems.length - 1]
-      let newItem = {
-        "x": parseInt(lastItem.x) === 2 ? 0 : lastItem.x + 1,
-        "y": this.graphItems.length % 3 == 0 ? parseInt(lastItem.y) + 1 : lastItem.y,
-        "w": 1,
-        "h": 1,
-        "i": parseInt(lastItem.i) + 1 + '',
-        "s": this.showStyle
-      }
-      this.graphItems.push(newItem)
+      this.addEnvData(dataInfo).then(() => {
+        // 推入新的item到graphInfo
+        let lastItem = this.graphItems[this.graphItems.length - 1]
+        let newItem = {
+          "x": parseInt(lastItem.x) === 2 ? 0 : lastItem.x + 1,
+          "y": this.graphItems.length % 3 == 0 ? parseInt(lastItem.y) + 1 : lastItem.y,
+          "w": 1,
+          "h": 1,
+          "i": parseInt(lastItem.i) + 1 + '',
+          "s": this.showStyle
+        }
+        this.graphItems.push(newItem)
+      })
       this.dialogVisible2 = false
     }
   },
