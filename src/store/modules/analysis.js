@@ -31,18 +31,20 @@ const analysis = {
     ADD_DATA: (state, data) => state.dataList.push(data)
   },
   actions: {
-    addData: ({ commit }, dataSource, scope) => {
+    addEnvData: ({ commit }, dataInfo) => {
+      console.log(dataInfo)
       return new Promise((resolve, reject) => {
         let postBody = new FormData()
-        let url = '/api/analysis'
-        postBody.set('dataSource', dataSource)
-        postBody.set('lonMin', scope[0])
-        postBody.set('lonMax', scope[1])
-        postBody.set('latMin', scope[2])
-        postBody.set('latMax', scope[3])
-        postBody.set('heightMin', scope[4])
-        postBody.set('heightMax', scope[5])
-        postBody.set('measure', measure)
+        let url = '/data'
+        postBody.set('source', dataInfo.dataSource)
+        postBody.set('lonMin', dataInfo.scope.lonMin)
+        postBody.set('lonMax', dataInfo.scope.lonMax)
+        postBody.set('latMin', dataInfo.scope.latMin)
+        postBody.set('latMax', dataInfo.scope.latMax)
+        postBody.set('heightMin', dataInfo.scope.heightMin)
+        postBody.set('heightMax', dataInfo.scope.heightMax)
+        postBody.set('measure', dataInfo.measure)
+        console.log(postBody.get('lonMin'))
         restapi.request({
           method: 'post',
           url: url,

@@ -170,7 +170,7 @@
       <ul class="agrithm-config-ul">
         <li>
           <div class="agrithm-config-title">数据源选择：</div>
-          <el-select name="select2" id="select2" v-model="dataScope.dataSource"></el-select>
+          <el-select name="select2" id="select2" v-model="dataSource"></el-select>
         </li>
         <!--<li><div class="agrithm-config-title">时间范围：</div>
             <el-input class="input-left" v-model="tsscope.settimeStart"/><span class="zhi">至</span>
@@ -204,7 +204,7 @@ import EchartsLine from '@/components/EchartsLine.vue'
 import EchartsMap from '@/components/EchartsMap.vue'
 import EchartsScatter from '@/components/EchartsScatter.vue'
 import EchartsBar from '@/components/EchartsBar.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import 'echarts-gl'
 import { successTip } from '@/utils/common.js'
 import { getLineOption, getBarOption, getScatterOption } from '@/utils/charts.js'
@@ -225,7 +225,7 @@ export default {
         // s=showStyle
         { "x": 0, "y": 0, "w": 1, "h": 1, "i": "0", "s": 'line' },
         { "x": 1, "y": 0, "w": 1, "h": 1, "i": "1", "s": 'bar' },
-        { "x": 2, "y": 0, "w": 1, "h": 1, "i": "2", "s": 'scatter' },
+        // { "x": 2, "y": 0, "w": 1, "h": 1, "i": "2", "s": 'scatter' },
         // { "x": 0, "y": 1, "w": 1, "h": 1, "i": "3" },
         // { "x": 1, "y": 1, "w": 1, "h": 1, "i": "4" },
         // { "x": 2, "y": 1, "w": 1, "h": 1, "i": "5" },
@@ -255,20 +255,21 @@ export default {
         heightStart: '5000m',
         heightEnd: '20000m'
       },
+      dataSource: '',
       dataScope: {
-        dataSource: '',
-        lonMin: '108°E',
-        lonMax: '116°E',
-        latMin: '15°N',
-        latMax: '23°N',
-        heightMin: '5000m',
-        heightMax: '20000m'
+        lonMin: '108',
+        lonMax: '108',
+        latMin: '15',
+        latMax: '23',
+        heightMin: '5000',
+        heightMax: '5000'
       },
       // 当前图例的显示方式
       showStyle: ''
     }
   },
   methods: {
+    ...mapActions(['addEnvData']),
     genMDX () {
       this.mdx = 'AVG([Measures].[Temperature] SELECT {[Measures].[Temperature]} ON COLUMNS, {[TimeDim].[AllTime],' 
       + '[Longitude].[AllLongitude]' 
@@ -308,13 +309,16 @@ export default {
     // 从后台获取数据，更新vuex中的dataList，并添加item至graphItems
     confirmSetData () {
       // todo：更新vuex内容
+      let dataInfo = { "dataSource": "TPV", "scope": this.dataScope, "measure": "temperature" }
+      this.addEnvData(dataInfo)
+      // 推入新的item到graphInfo
       let lastItem = this.graphItems[this.graphItems.length - 1]
       let newItem = {
         "x": parseInt(lastItem.x) === 2 ? 0 : lastItem.x + 1,
         "y": this.graphItems.length % 3 == 0 ? parseInt(lastItem.y) + 1 : lastItem.y,
         "w": 1,
         "h": 1,
-        "i": parseInt(lastItem.i) + 1,
+        "i": parseInt(lastItem.i) + 1 + '',
         "s": this.showStyle
       }
       this.graphItems.push(newItem)
