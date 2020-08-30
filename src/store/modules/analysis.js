@@ -22,7 +22,9 @@ const analysis = {
       {
         "list": linedata.list
       },
-      bardata,
+      {
+        "list": linedata.list
+      }
     ]
   },
   mutations: {

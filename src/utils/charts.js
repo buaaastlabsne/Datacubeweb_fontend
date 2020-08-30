@@ -114,16 +114,25 @@ export function getLineOption (data) {
   }
 }
 
+// 坐标标题的映射字典
+const axisDic = {
+  'temperature': '温度(°C)',
+  'pressure': '压强(kPa)',
+  'longitude': '经度(°)',
+  'latitude': '纬度(°)',
+  'height': '高度(m)'
+}
+
 // 将柱状数据转换成绘图option的函数
 export function getBarOption (data) {		
   return {
-    legend: {
-      data:['温度'],
-      align: 'left'
-    },
+    //legend: {
+      //data:['温度'],
+      //align: 'left'
+    //},
     tooltip: {},
     xAxis: {
-      name:'高度(m)',
+      name: axisDic[data.axisName[0]],
       data: data.xAxisData,
       silent: false,
       splitLine: {
@@ -131,10 +140,10 @@ export function getBarOption (data) {
       }
     },
     yAxis: {
-      name: '温度(°C)'			
+      name: axisDic[data.axisName[1]]			
     },
     series: [{
-      name: '温度',
+      name: axisDic[data.axisName[1]],
       type: 'bar',
       data: data.yAxisData,
       animationDelay: function (idx) {
